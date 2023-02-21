@@ -1,4 +1,5 @@
 
+
 const timer = setInterval(function() {
   // Отримуємо поточну дату та час
   const now = new Date().getTime();
