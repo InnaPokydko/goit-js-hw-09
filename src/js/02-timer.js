@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 
+
 import 'flatpickr/dist/flatpickr.min.css';
 
 const refs = {
@@ -11,6 +12,12 @@ const refs = {
   dataSec: document.querySelector('value[data-seconds]'),
 };
 
+refs.startBtn.setAttribute('disabled', true);
+const flatp = flatpickr(refs.text, options);
+let timerId = null;
+
+refs.startBtn.addEventListener('click', onStart);
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -18,22 +25,29 @@ const options = {
   minuteIncrement: 1,
 
   onClose(selectedDates) {
-    setInterval(() => {
-      const currentTime = Date.now;
-      const deltaTime = defaultDate - currentTime;
-      console.log(selectedDates[0]);
-      const timeComponents = convertMs(deltaTime);
-    }, 1000);
+    const currentDate = new Date();
+
+    if (selectedDates[0] - currentDate > 0) {
+      refs.startBtn.disabled = false;
+    } else {
+      refs.startBtn.disabled = true;
+      Notify.failure('Please choose a date in the future')
+    }
   },
 };
 
-refs.startBtn.setAttribute('disabled', true);
-flatpickr(refs.text, options);
-let timerId = null;
+onClose.start();
+//     setInterval(() => {
+//       const currentTime = Date.now;
+//       const deltaTime = defaultDate - currentTime;
+//       console.log(selectedDates[0]);
+//       const timeComponents = convertMs(deltaTime);
+//     }, 1000);
+//   },
+// };
 
-options.start();
 
-function convertMs() {
+function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -51,6 +65,21 @@ console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
+ function onStart() {
+    const selectedDate = flatp.selectedDates[0];
+  
+    timerId = setInterval(() => {
+      const startTime = new Date();
+      const deltaTime = selectedDate - startTime;
+      refs.startBtn.disabled = true;
+  
+      if (deltaTime < 0) {
+        clearInterval(timerId);
+        return;
+      }
+      updateTimerFace(convertMs(deltaTime));
+    }, 1_000);
+  }
 
 // const timer = setInterval(function() {
 //   // Отримуємо поточну дату та час
@@ -75,7 +104,6 @@ console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20
 //     timerElement.innerHTML = "Час вийшов!";
 //   }
 // }, 1000);
-
 
 // import flatpickr from 'flatpickr';
 // import 'flatpickr/dist/flatpickr.min.css';
