@@ -1,5 +1,5 @@
 import flatpickr from 'flatpickr';
-
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -11,12 +11,6 @@ const refs = {
   dataMin: document.querySelector('value[data-minutes]'),
   dataSec: document.querySelector('value[data-seconds]'),
 };
-
-refs.startBtn.setAttribute('disabled', true);
-const flatp = flatpickr(refs.text, options);
-let timerId = null;
-
-refs.startBtn.addEventListener('click', onStart);
 
 const options = {
   enableTime: true,
@@ -35,6 +29,12 @@ const options = {
     }
   },
 };
+
+refs.startBtn.setAttribute('disabled', true);
+const flatp = flatpickr(refs.text, options);
+let timerId = null;
+
+refs.startBtn.addEventListener('click', onStart);
 
 onClose.start();
 //     setInterval(() => {
