@@ -25,7 +25,7 @@ const options = {
       refs.startBtn.disabled = false;
     } else {
       refs.startBtn.disabled = true;
-      Notify.failure('Please choose a date in the future')
+      Notify.failure('Please choose a date in the future');
     }
   },
 };
@@ -33,19 +33,7 @@ const options = {
 refs.startBtn.setAttribute('disabled', true);
 const flatp = flatpickr(refs.text, options);
 let timerId = null;
-
 refs.startBtn.addEventListener('click', onStart);
-
-onClose.start();
-//     setInterval(() => {
-//       const currentTime = Date.now;
-//       const deltaTime = defaultDate - currentTime;
-//       console.log(selectedDates[0]);
-//       const timeComponents = convertMs(deltaTime);
-//     }, 1000);
-//   },
-// };
-
 
 function convertMs(ms) {
   const second = 1000;
@@ -65,22 +53,41 @@ console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
- function onStart() {
-    const selectedDate = flatp.selectedDates[0];
-  
-    timerId = setInterval(() => {
-      const startTime = new Date();
-      const deltaTime = selectedDate - startTime;
-      refs.startBtn.disabled = true;
-  
-      if (deltaTime < 0) {
-        clearInterval(timerId);
-        return;
-      }
-      updateTimerFace(convertMs(deltaTime));
-    }, 1_000);
-  }
+function onStart() {
+  const selectedDate = flatp.selectedDates[0];
 
+  timerId = setInterval(() => {
+    const startTime = new Date();
+    const deltaTime = selectedDate - startTime;
+    refs.startBtn.disabled = true;
+
+    if (deltaTime < 0) {
+      clearInterval(timerId);
+      return;
+    }
+    updateTimerFace(convertMs(deltaTime));
+  }, 1_000);
+}
+
+function updateTimerFace({ days, hours, minutes, seconds }) {
+  refs.dataDays.innerText = addLeadingZero(days);
+  refs.dataHours.innerText = addLeadingZero(hours);
+  refs.dataMin.innerText = addLeadingZero(minutes);
+  refs.dataSec.innerText = addLeadingZero(seconds);
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, 0);
+}
+
+//     setInterval(() => {
+//       const currentTime = Date.now;
+//       const deltaTime = defaultDate - currentTime;
+//       console.log(selectedDates[0]);
+//       const timeComponents = convertMs(deltaTime);
+//     }, 1000);
+//   },
+// };
 // const timer = setInterval(function() {
 //   // Отримуємо поточну дату та час
 //   const now = new Date().getTime();

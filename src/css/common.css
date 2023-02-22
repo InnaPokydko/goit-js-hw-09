@@ -18,21 +18,22 @@ img {
 }
 
 .flatpickr-input {
-  min-width: 20px;
-  min-height: 50px;
+  min-width: 150px;
+  min-height: 40px;
   margin-right: 20px;
   border: 1px;
   
   font-family: "Raleway", sans-serif;
   font-weight: 400;
   font-size: 16px;
+  text-align: center;
 }
 
 button {
    border: 1px solid transparent;
     border-radius: 4px;
-  padding: 3px 5px;
-  min-width: 60px;
+  padding: 5px 8px;
+  min-width: 80px;
   background-color: #4b9494;
   color: #f2f7f7;
   font-family: "Raleway", sans-serif;
@@ -68,4 +69,5 @@ button:hover {
   font-weight: 600;
   font-size: 22px;
   line-height: 1.25;
+  
 }
