@@ -21,6 +21,7 @@ function createPromise(position, delay) {
       }
      }, delay) ;
     });
+  }
 
     promise
       .then(({ position, delay }) => {
@@ -33,5 +34,5 @@ function createPromise(position, delay) {
           `❌ Rejected promise ${position} in ${delay}ms`
         );
       });
-  };
+  
 
