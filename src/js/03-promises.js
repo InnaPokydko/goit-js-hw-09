@@ -7,10 +7,10 @@ function onSubmit(e) {
   e.preventDefault();
 }
 
-function createPromise(position, delay) {
+function createPromise (position, delay)  {
   const shouldResolve = Math.random() > 0.3;
 
-  const promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
         setTimeout(() => {
       if (shouldResolve) {
         resolve({ position, delay });
@@ -23,7 +23,7 @@ function createPromise(position, delay) {
     });
   }
 
-    promise
+    Promise
       .then(({ position, delay }) => {
         Notiflix.Notify.failure(
           `✅ Fulfilled promise ${position} in ${delay}ms`
