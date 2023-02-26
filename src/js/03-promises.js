@@ -1,28 +1,30 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const form = document.querySelector('.form');
-form.addEventListener('submit', onSubmit);
+const refs = {
+  form: document.querySelector('.form'),
+  firstDelay: document.querySelector('input[name=delay]'),
+  stepDelay: document.querySelector('input[name=step]'),
+  amountDelay: document.querySelector('input[name=amount]'),
+};
+refs.form.addEventListener('submit', onSubmit);
 
-let delay = Number(form.delay.value);
-let step = Number(form.step.value);
-let amount = Number(form.amount.value);
 
 function onSubmit(e) {
   e.preventDefault();
 
-    for (let i = 0; i <= amount; i += 1) {
-    createPromise(i, delay)
+  let fDelay = Number(refs.firstDelay.value);
+let step = Number(refs.stepDelay.value);
+let amount = Number(refs.amountDelay.value);
+
+  for (let i = 0; i <= amount; i += 1) {
+    createPromise(i, fDelay)
       .then(({ position, delay }) => {
-        Notify.success(
-          `✅ Fulfilled promise ${position} in ${delay}ms`
-        );
+        Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
       .catch(({ position, delay }) => {
-        Notify.failure(
-          `❌ Rejected promise ${position} in ${delay}ms`
-        );
+        Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
-    delay += step;
+    fDelay += step;
   }
 }
 
@@ -41,7 +43,6 @@ function createPromise(position, delay) {
     }, delay);
   });
 }
-
 
 // const { delay, step, amount } = e.currentTarget;
 // .then(({ position, delay }) => {
