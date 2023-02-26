@@ -13,12 +13,12 @@ function onSubmit(e) {
     for (let i = 0; i <= amount; i += 1) {
     createPromise(i, delay)
       .then(({ position, delay }) => {
-        Notiflix.Notify.failure(
+        Notify.success(
           `✅ Fulfilled promise ${position} in ${delay}ms`
         );
       })
       .catch(({ position, delay }) => {
-        Notiflix.Notify.failure(
+        Notify.failure(
           `❌ Rejected promise ${position} in ${delay}ms`
         );
       });
