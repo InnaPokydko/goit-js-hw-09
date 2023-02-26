@@ -13,6 +13,7 @@ const refs = {
 };
 
 let timerId = null;
+let selectedDates = [];
 refs.startBtn.setAttribute('disabled', true);
 
 const options = {
@@ -22,75 +23,87 @@ const options = {
   minuteIncrement: 1,
 
   onClose(selectedDates) {
-    if (selectedDates[0] - new Date() < 0) {
+    if (selectedDates[0] < new Date()) {
       refs.startBtn.disabled = true;
       Notify.failure('Please choose a date in the future');
     }
   },
 };
 
-const flatp = flatpickr(refs.text, options);
+flatpickr(refs.text, options);
 
 refs.startBtn.addEventListener('click', onStart);
 
-const selectedDate = Number(flatp.selectedDates[0]);
 function onStart() {
- 
   timerId = setInterval(() => {
-    const currentDate = new Date().getTime();
-    const deltaTime = selectedDate - currentDate;
-   
-    // if (deltaTime < 0) {
-    //   clearInterval(timerId);
-    //   return;
-    // }
+    const currentDate = new Date();
+    const deltaTime = selectedDates[0].getTime() - currentDate;
+
     refs.startBtn.disabled = false;
-    updateTimerFace(convertMs(deltaTime));
-  }, 1_000);
+    refs.text.disabled = false;
+
+    if (deltaTime > 0) {
+      const { days, hours, minutes, seconds } = convertMs(deltaTime);
+      refs.dataDays.textContent = days;
+      refs.dataHours.textContent = hours;
+      refs.dataMin.textContent = minutes;
+      refs.dataSec.textContent = seconds;
+    } else {
+      clearInterval(timerId);
+    }
+  }, 1000);
+  return;
 }
 
+function addLeadingZero(value) {
+  return String(value).padStart(2, 0);
+}
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
 
-  const days = Math.floor(ms / day);
-  const hours = Math.floor((ms % day) / hour);
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const days = addLeadingZero(Math.floor(ms / day));
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
 
   return { days, hours, minutes, seconds };
 }
-
 console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
-function addLeadingZero(value) {
-  return String(value).padStart(2, 0);
-}
 
-function updateTimerFace({ days, hours, minutes, seconds }) {
-  if (refs.dataDays) {
-    refs.dataDays.innerText = addLeadingZero(days);
-  }
-  if (refs.dataHours) {
-    refs.dataHours.innerText = addLeadingZero(hours);
-  }
-  if (refs.dataMin) {
-    refs.dataMin.innerText = addLeadingZero(minutes);
-  }
-  if (refs.dataSec) {
-    refs.dataSec.innerText = addLeadingZero(seconds);
-  }
-}
 
 // function updateTimerFace({ days, hours, minutes, seconds }) {
-//   refs.dataDays.innerText = addLeadingZero(days);
-//   refs.dataHours.innerText = addLeadingZero(hours);
-//   refs.dataMin.innerText = addLeadingZero(minutes);
-//   refs.dataSec.innerText = addLeadingZero(seconds);
+//   refs.dataDays.textContent = addLeadingZero(days);
+//   refs.dataHours.textContent = addLeadingZero(hours);
+//   refs.dataMin.textContent = addLeadingZero(minutes);
+//   refs.dataSec.textContent = addLeadingZero(seconds);
+// }
+
+// function updateTimerFace({ days, hours, minutes, seconds }) {
+//   if (refs.dataDays) {
+//     refs.dataDays.innerText = addLeadingZero(days);
+//   }
+//   if (refs.dataHours) {
+//     refs.dataHours.innerText = addLeadingZero(hours);
+//   }
+//   if (refs.dataMin) {
+//     refs.dataMin.innerText = addLeadingZero(minutes);
+//   }
+//   if (refs.dataSec) {
+//     refs.dataSec.innerText = addLeadingZero(seconds);
+//   }
+// }
+
+// function createMarkup({ days, hours, minutes, seconds }) {
+//   refs.dataDays.textContent = days;
+//   refs.dataHours.textContent = hours;
+//   refs.dataMin.textContent = minutes;
+//   refs.dataSec.textContent = seconds;
 // }
 
 // window.addEventListener(refs.dataDays.textContent = '00',
