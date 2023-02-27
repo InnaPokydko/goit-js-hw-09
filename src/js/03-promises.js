@@ -26,6 +26,7 @@ let amount = Number(refs.amountDelay.value);
       });
     fDelay += step;
   }
+  refs.form.reset(); 
 }
 
 function createPromise(position, delay) {
