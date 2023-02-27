@@ -25,9 +25,9 @@ let amount = Number(refs.amountDelay.value);
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
     fDelay += step;
-  }
-  refs.form.reset(); 
-}
+     };
+     e.target.reset();
+     }
 
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
@@ -42,9 +42,10 @@ function createPromise(position, delay) {
         reject({ position, delay });
       }
     }, delay);
-  });
-}
+     });
+ }
 
+ 
 // const { delay, step, amount } = e.currentTarget;
 // .then(({ position, delay }) => {
 //   Notiflix.Notify.failure(`✅ Fulfilled promise ${position} in ${delay}ms`);
